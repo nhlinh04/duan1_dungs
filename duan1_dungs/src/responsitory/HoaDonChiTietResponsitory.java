@@ -40,6 +40,18 @@ public class HoaDonChiTietResponsitory {
         return hoaDonChiTiet;
     }
 
+    public List<HoaDonChiTiet> getByIdHoaDon(int idHoaDon) {
+        List<HoaDonChiTiet> list = new ArrayList<>();
+        try (ResultSet rs = JDBCHelped.executeQuery("SELECT * FROM HoaDonChiTiet Where id_hoa_don = ?", idHoaDon)) {
+            while (rs.next()) {
+                list.add(mapResultSetToHoaDonChiTiet(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    
     // Phương thức thêm một hóa đơn chi tiết mới
     public boolean insert(HoaDonChiTiet hoaDonChiTiet) {
         String sql = "INSERT INTO HoaDonChiTiet (id_san_pham, id_hoa_don, so_luong, don_gia, ngay_tao, ngay_sua, trang_thai) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -64,6 +76,9 @@ public class HoaDonChiTietResponsitory {
         return JDBCHelped.excuteUpdate(sql, hoaDonChiTiet.getId()) > 0;
     }
 
+    
+    
+    
     // Phương thức ánh xạ ResultSet sang đối tượng HoaDonChiTiet
     private HoaDonChiTiet mapResultSetToHoaDonChiTiet(ResultSet rs) throws SQLException {
         return new HoaDonChiTiet(rs.getInt("id"), rs.getInt("id_san_pham"),
