@@ -40,8 +40,6 @@ public class Word {
             // Thông tin khách hàng
             createLineText(document, "Mã hóa đơn: " + bill.getCode(), ParagraphAlignment.CENTER);
             createLineText(document, "Khách Hàng: " + bill.getCustomeName(), ParagraphAlignment.LEFT);
-            createLineText(document, "Địa chỉ: " + bill.getCustomeAddress(), ParagraphAlignment.LEFT);
-            createLineText(document, "Số điện thoại: " + bill.getCustomePhone(), ParagraphAlignment.LEFT);
 
             // Bảng sản phẩm
             createProductTable(document, bill.getProducts());
@@ -49,7 +47,6 @@ public class Word {
             addBreak(document);
 
             // Tổng cộng
-            createBoldText(document, "GIẢM GIÁ: " + formatCurrency(bill.getSaleOfMoney()), ParagraphAlignment.LEFT);
             createBoldText(document, "Tổng cộng: " + formatCurrency(bill.getTotal()), ParagraphAlignment.LEFT);
 
             createBoldText(document, "NGƯỜI TẠO", ParagraphAlignment.RIGHT);

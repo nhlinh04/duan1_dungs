@@ -11,22 +11,16 @@ import java.util.List;
 public class BillRes {
     private String code;
     private String customeName;
-    private String customeAddress;
-    private String customePhone;
     private List<ProductRes> products;
-    private BigDecimal saleOfMoney;
     private BigDecimal total;
 
     public BillRes() {
     }
 
-    public BillRes(String code, String customeName, String customeAddress, String customePhone, List<ProductRes> products, BigDecimal saleOfMoney, BigDecimal total) {
+    public BillRes(String code, String customeName, List<ProductRes> products, BigDecimal total) {
         this.code = code;
         this.customeName = customeName;
-        this.customeAddress = customeAddress;
-        this.customePhone = customePhone;
         this.products = products;
-        this.saleOfMoney = saleOfMoney;
         this.total = total;
     }
 
@@ -46,36 +40,12 @@ public class BillRes {
         this.customeName = customeName;
     }
 
-    public String getCustomeAddress() {
-        return customeAddress;
-    }
-
-    public void setCustomeAddress(String customeAddress) {
-        this.customeAddress = customeAddress;
-    }
-
-    public String getCustomePhone() {
-        return customePhone;
-    }
-
-    public void setCustomePhone(String customePhone) {
-        this.customePhone = customePhone;
-    }
-
     public List<ProductRes> getProducts() {
         return products;
     }
 
     public void setProducts(List<ProductRes> products) {
         this.products = products;
-    }
-
-    public BigDecimal getSaleOfMoney() {
-        return saleOfMoney;
-    }
-
-    public void setSaleOfMoney(BigDecimal saleOfMoney) {
-        this.saleOfMoney = saleOfMoney;
     }
 
     public BigDecimal getTotal() {
@@ -85,6 +55,7 @@ public class BillRes {
     public void setTotal(BigDecimal total) {
         this.total = total;
     }
+
     
     
 }
