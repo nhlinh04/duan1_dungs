@@ -4,6 +4,8 @@
  */
 package panel;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -15,8 +17,13 @@ import javax.swing.table.DefaultTableModel;
 import main.main;
 import model.HoaDon;
 import model.HoaDonChiTiet;
+import model.SanPham;
+import model.respon.BillRes;
+import model.respon.ProductRes;
 import responsitory.HoaDonChiTietResponsitory;
 import responsitory.HoaDonResponsitory;
+import responsitory.SanPhamResponsitory;
+import word.Word;
 
 /**
  *
@@ -28,6 +35,7 @@ public class HoaDonPanel extends javax.swing.JPanel {
     private DefaultTableModel tableModel;
     private HoaDonResponsitory hoaDonResponsitory = new HoaDonResponsitory();
     private HoaDonChiTietResponsitory hoaDonChiTietResponsitory = new HoaDonChiTietResponsitory();
+    private SanPhamResponsitory sanPhamResponsitory = new SanPhamResponsitory();
     private int index = -1;
     
     public HoaDonPanel() {
@@ -92,7 +100,6 @@ public class HoaDonPanel extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         btnBack = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
-        btnXuatExcel = new javax.swing.JButton();
         btnInHoaDon = new javax.swing.JButton();
         btnXemChiTiet = new javax.swing.JButton();
 
@@ -276,14 +283,16 @@ public class HoaDonPanel extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        btnXuatExcel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnXuatExcel.setText("Xuất excel");
-
         btnInHoaDon.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnInHoaDon.setText("In hóa đơn");
         btnInHoaDon.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnInHoaDonMouseClicked(evt);
+            }
+        });
+        btnInHoaDon.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInHoaDonActionPerformed(evt);
             }
         });
 
@@ -309,8 +318,6 @@ public class HoaDonPanel extends javax.swing.JPanel {
                 .addComponent(btnInHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnXemChiTiet, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnXuatExcel, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
@@ -321,8 +328,7 @@ public class HoaDonPanel extends javax.swing.JPanel {
                     .addComponent(btnInHoaDon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(btnXemChiTiet, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(btnXuatExcel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -447,13 +453,36 @@ public class HoaDonPanel extends javax.swing.JPanel {
     private void btnInHoaDonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInHoaDonMouseClicked
         if(index != -1){
             String maHoaDon = (String) tblHoaDon.getValueAt(index, 0); 
-            System.out.println(hoaDonResponsitory.searchByMa(maHoaDon).get(0).toString());
+            BillRes billRes = new BillRes();
+            List<ProductRes> listSp = new ArrayList<>();
+            HoaDon hoaDon = hoaDonResponsitory.searchByMa(maHoaDon).get(0);
+            List<HoaDonChiTiet> listHDCT = hoaDonChiTietResponsitory.getByIdHoaDon(hoaDon.getId());
+            ProductRes productRes = new ProductRes();
+            
+            billRes.setCode(hoaDon.getMaHoaDon());
+            billRes.setCustomeName(hoaDon.getIdKhachHang()+"");
+            for (int i = 0; i < listHDCT.size(); i++) {
+                productRes.setCodeProduct(String.valueOf(listHDCT.get(i).getIdSanPham()));
+                productRes.setName("NO NAME");
+                productRes.setQuantity(listHDCT.get(i).getSoLuong());
+                productRes.setTotal(BigDecimal.valueOf(listHDCT.get(i).getDonGia()*listHDCT.get(i).getSoLuong()));
+                productRes.setUnitPrice(BigDecimal.valueOf(listHDCT.get(i).getDonGia()));
+                listSp.add(productRes);
+            }
+            billRes.setProducts(listSp);
+            billRes.setTotal(productRes.getTotal());
+            Word.createFile(billRes);
+            JOptionPane.showMessageDialog(this, "In thành công");
         } else {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn hóa đơn muốn xem !", "!!!", 2);
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn hóa đơn muốn in !", "!!!", 2);
         }
         
         
     }//GEN-LAST:event_btnInHoaDonMouseClicked
+
+    private void btnInHoaDonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInHoaDonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnInHoaDonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -461,7 +490,6 @@ public class HoaDonPanel extends javax.swing.JPanel {
     private javax.swing.JButton btnInHoaDon;
     private javax.swing.JButton btnLoc;
     private javax.swing.JButton btnXemChiTiet;
-    private javax.swing.JButton btnXuatExcel;
     private javax.swing.JComboBox<String> cbbStatus;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
