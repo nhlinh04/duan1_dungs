@@ -18,12 +18,12 @@ public class HoaDonChiTiet {
     private double donGia;
     private Date ngayTao;
     private Date ngaySua;
-    private String trangThai;
+    private Boolean trangThai;
 
     public HoaDonChiTiet() {
     }
 
-    public HoaDonChiTiet(int id, int idSanPham, int idHoaDon, int soLuong, double donGia, Date ngayTao, Date ngaySua, String trangThai) {
+    public HoaDonChiTiet(int id, int idSanPham, int idHoaDon, int soLuong, double donGia, Date ngayTao, Date ngaySua, Boolean trangThai) {
         this.id = id;
         this.idSanPham = idSanPham;
         this.idHoaDon = idHoaDon;
@@ -33,6 +33,8 @@ public class HoaDonChiTiet {
         this.ngaySua = ngaySua;
         this.trangThai = trangThai;
     }
+
+    
 
     public int getId() {
         return id;
@@ -90,11 +92,11 @@ public class HoaDonChiTiet {
         this.ngaySua = ngaySua;
     }
 
-    public String getTrangThai() {
+    public Boolean getTrangThai() {
         return trangThai;
     }
 
-    public void setTrangThai(String trangThai) {
+    public void setTrangThai(Boolean trangThai) {
         this.trangThai = trangThai;
     }
     

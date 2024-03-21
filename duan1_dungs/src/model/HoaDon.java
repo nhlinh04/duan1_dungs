@@ -22,12 +22,12 @@ public class HoaDon {
     private Date ngayNhanHang;
     private String maGiamGia;
     private String ghiChu;
-    private String trangThai;
+    private Boolean trangThai;
 
     public HoaDon() {
     }
 
-    public HoaDon(int id, String maHoaDon, int idHinhThucThanhToan, int idKhachHang, int idNhanVien, Date ngayTao, Date ngaySua, Date ngayThanhToan, Date ngayNhanHang, String maGiamGia, String ghiChu, String trangThai) {
+    public HoaDon(int id, String maHoaDon, int idHinhThucThanhToan, int idKhachHang, int idNhanVien, Date ngayTao, Date ngaySua, Date ngayThanhToan, Date ngayNhanHang, String maGiamGia, String ghiChu, Boolean trangThai) {
         this.id = id;
         this.maHoaDon = maHoaDon;
         this.idHinhThucThanhToan = idHinhThucThanhToan;
@@ -130,11 +130,11 @@ public class HoaDon {
         this.ghiChu = ghiChu;
     }
 
-    public String getTrangThai() {
+    public Boolean getTrangThai() {
         return trangThai;
     }
 
-    public void setTrangThai(String trangThai) {
+    public void setTrangThai(Boolean trangThai) {
         this.trangThai = trangThai;
     }
     
