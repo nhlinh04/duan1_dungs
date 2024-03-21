@@ -28,12 +28,11 @@ public class HoaDonPanel extends javax.swing.JPanel {
     private DefaultTableModel tableModel;
     private HoaDonResponsitory hoaDonResponsitory = new HoaDonResponsitory();
     private HoaDonChiTietResponsitory hoaDonChiTietResponsitory = new HoaDonChiTietResponsitory();
-    
+    private int index = -1;
     
     public HoaDonPanel() {
         initComponents();
         fillTableHoaDon(hoaDonResponsitory.getAll());
-        fillTableHoaDonChiTiet(hoaDonChiTietResponsitory.getAll());
         loadStatus();
     }
 
@@ -170,6 +169,11 @@ public class HoaDonPanel extends javax.swing.JPanel {
                 "Mã hóa đơn", "Hinh thức TT", "Tên khách hàng", "Tên nhân viên", "Ngày tạo", "Ngày sửa", "Ngày thanh toán", "Ngày nhận hàng", "Mã GG", "Ghi chú", "Trạng thái"
             }
         ));
+        tblHoaDon.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblHoaDonMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblHoaDon);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -203,10 +207,7 @@ public class HoaDonPanel extends javax.swing.JPanel {
 
         tblHoaDonChiTiet.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+
             },
             new String [] {
                 "Sản phẩm", "Hóa đơn", "Số lượng", "Đơn giá", "Ngày tạo", "Ngày sửa", "Trạng thái"
@@ -280,9 +281,19 @@ public class HoaDonPanel extends javax.swing.JPanel {
 
         btnInHoaDon.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnInHoaDon.setText("In hóa đơn");
+        btnInHoaDon.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnInHoaDonMouseClicked(evt);
+            }
+        });
 
         btnXemChiTiet.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnXemChiTiet.setText("Xem chi tiết");
+        btnXemChiTiet.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnXemChiTietMouseClicked(evt);
+            }
+        });
         btnXemChiTiet.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnXemChiTietActionPerformed(evt);
@@ -341,14 +352,20 @@ public class HoaDonPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void txtSearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtSearchMouseClicked
+        DefaultTableModel tableModel = (DefaultTableModel) tblHoaDonChiTiet.getModel();
+        
         txtSearch.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
                 String ma = txtSearch.getText();
                 if(ma.trim().equals("")){
                     fillTableHoaDon(hoaDonResponsitory.getAll());
+                    tableModel.setRowCount(0);
+                    index = -1;
                 } else {
                     fillTableHoaDon(hoaDonResponsitory.searchByMa(ma));
+                    tableModel.setRowCount(0);
+                    index = -1;
                 }
             }
 
@@ -357,8 +374,12 @@ public class HoaDonPanel extends javax.swing.JPanel {
                 String ma = txtSearch.getText();
                 if(ma.trim().equals("")){
                     fillTableHoaDon(hoaDonResponsitory.getAll());
+                    tableModel.setRowCount(0);
+                    index = -1;
                 } else {
                     fillTableHoaDon(hoaDonResponsitory.searchByMa(ma));
+                    tableModel.setRowCount(0);
+                    index = -1;
                 }
             }
 
@@ -367,8 +388,12 @@ public class HoaDonPanel extends javax.swing.JPanel {
                 String ma = txtSearch.getText();
                 if(ma.trim().equals("")){
                     fillTableHoaDon(hoaDonResponsitory.getAll());
+                    tableModel.setRowCount(0);
+                    index = -1;
                 } else {
                     fillTableHoaDon(hoaDonResponsitory.searchByMa(ma));
+                    tableModel.setRowCount(0);
+                    index = -1;
                 }
             }
             
@@ -382,13 +407,53 @@ public class HoaDonPanel extends javax.swing.JPanel {
     private void btnLocMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLocMouseClicked
         String st = (String) cbbStatus.getSelectedItem();
         Integer status = st.equals("true") ? 1:0;
+        DefaultTableModel tableModel = (DefaultTableModel) tblHoaDonChiTiet.getModel();
         
         if(status != null ){
             fillTableHoaDon(hoaDonResponsitory.searchByStatus(status));
+            tableModel.setRowCount(0);
+            index = -1;
         } else {
             fillTableHoaDon(hoaDonResponsitory.getAll());
+            tableModel.setRowCount(0);
+            index = -1;
         }
     }//GEN-LAST:event_btnLocMouseClicked
+
+    private void btnXemChiTietMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnXemChiTietMouseClicked
+               
+        if(index != -1){
+            String maHoaDon = (String) tblHoaDon.getValueAt(index, 0); 
+            System.out.println(hoaDonResponsitory.searchByMa(maHoaDon).get(0).toString());
+        } else {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn hóa đơn muốn xem !", "!!!", 2);
+        }
+        
+        
+    }//GEN-LAST:event_btnXemChiTietMouseClicked
+
+    private void tblHoaDonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonMouseClicked
+        index = tblHoaDon.getSelectedRow();
+        
+        if(index != -1){
+            String maHoaDon = (String) tblHoaDon.getValueAt(index, 0);
+            fillTableHoaDonChiTiet(hoaDonChiTietResponsitory.getByIdHoaDon(
+          hoaDonResponsitory.searchByMa(maHoaDon).get(0).getId()
+            ));
+        } 
+        
+    }//GEN-LAST:event_tblHoaDonMouseClicked
+
+    private void btnInHoaDonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInHoaDonMouseClicked
+        if(index != -1){
+            String maHoaDon = (String) tblHoaDon.getValueAt(index, 0); 
+            System.out.println(hoaDonResponsitory.searchByMa(maHoaDon).get(0).toString());
+        } else {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn hóa đơn muốn xem !", "!!!", 2);
+        }
+        
+        
+    }//GEN-LAST:event_btnInHoaDonMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
